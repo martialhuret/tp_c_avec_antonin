@@ -1,12 +1,13 @@
 # include "biblio.h"
 
-
+//////////////////////////////////////////////////////////
 void init(T_Bibliotheque *ptrB){
 	ptrB->nbLivres=0;
 	// ou (*ptrB).nbLivres=0;
 }
 
 
+//////////////////////////////////////////////////////////
 int ajouterLivre(T_Bibliotheque *ptrB){
 	if (ptrB->nbLivres<CAPACITE_BIBLIO){// reste t il de la place?
 		saisirLivre(&(ptrB->etagere[ptrB->nbLivres]));
@@ -17,6 +18,7 @@ int ajouterLivre(T_Bibliotheque *ptrB){
 }
 
 
+//////////////////////////////////////////////////////////
 int  afficherBibliotheque(const T_Bibliotheque *ptrB){
 	int i;
 	if(ptrB->nbLivres==0)
@@ -30,6 +32,7 @@ int  afficherBibliotheque(const T_Bibliotheque *ptrB){
 }
 
 
+//////////////////////////////////////////////////////////
 int rechercherLivre(const T_Bibliotheque  *ptrB, const T_Titre title){
 	int i;
 	if(ptrB->nbLivres==0) return -1;
@@ -42,6 +45,7 @@ int rechercherLivre(const T_Bibliotheque  *ptrB, const T_Titre title){
 }
 
 
+//////////////////////////////////////////////////////////
 void rechercheLivreAuteur(const T_Bibliotheque *ptrB ,const T_Aut auteur){
 	//init var
 	int i, cpt = 0;	
@@ -64,6 +68,7 @@ void rechercheLivreAuteur(const T_Bibliotheque *ptrB ,const T_Aut auteur){
 }
 
 
+//////////////////////////////////////////////////////////
 int supprimerLivre(T_Bibliotheque *ptrB, const T_Titre title){
     int test = rechercherLivre(ptrB, title);
     if (test == -1) return 0;
@@ -75,6 +80,7 @@ int supprimerLivre(T_Bibliotheque *ptrB, const T_Titre title){
 }
 
 
+//////////////////////////////////////////////////////////
 int estEmprunte(T_Bibliotheque *ptrB, const T_Titre title){
 	int pos = rechercherLivre(ptrB, title);
 	if (strlen(((ptrB->etagere)[pos].emprunteur))!=0) return -1;
@@ -82,6 +88,7 @@ int estEmprunte(T_Bibliotheque *ptrB, const T_Titre title){
 }
 
 
+//////////////////////////////////////////////////////////
 int emprunterLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name){
 	int pos = estEmprunte(ptrB,title);
     if (pos !=-1){
@@ -91,6 +98,7 @@ int emprunterLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name){
 }
 
 
+//////////////////////////////////////////////////////////
 int rendreLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name){	
 	int pos = estEmprunte(ptrB,title);
 	int lapos = rechercherLivre(ptrB,title);
@@ -106,6 +114,7 @@ int rendreLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name){
 }
 
 
+//////////////////////////////////////////////////////////
 void trierLivresParTitre(T_Bibliotheque *ptrB){
 	for (int i = 0; i < ptrB->nbLivres - 1; i++){
 		int minIndex = i;
@@ -121,6 +130,7 @@ void trierLivresParTitre(T_Bibliotheque *ptrB){
 }
 
 
+//////////////////////////////////////////////////////////
 void trierLivresParAuteur(T_Bibliotheque *ptrB){
 	for (int i = 0; i < ptrB->nbLivres - 1; i++){
 		int minIndex = i;
@@ -136,6 +146,7 @@ void trierLivresParAuteur(T_Bibliotheque *ptrB){
 }
 
 
+//////////////////////////////////////////////////////////
 void trierLivresParAnnee(T_Bibliotheque *ptrB){
 	for (int i = 0; i < ptrB->nbLivres - 1; i++){
 		int minIndex = i;

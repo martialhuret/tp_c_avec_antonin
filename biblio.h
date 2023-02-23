@@ -12,29 +12,66 @@ typedef struct {
 	int nbLivres;  //nb de livres actuellement ds la bibliotheque
 } T_Bibliotheque;
 
-//prototypes
+//PROTOTYPES
+
 void init(T_Bibliotheque *ptrB);
 
 int ajouterLivre(T_Bibliotheque *ptrB);
 
 int  afficherBibliotheque(const T_Bibliotheque *ptrB);
 
-int rechercherLivre(const T_Bibliotheque *ptrB,const T_Titre title); //fonction 3
+/*******************************************************************************************/
+/*Fonction n°3 */
+/*Description : */
+/*******************************************************************************************/
+int rechercherLivre(const T_Bibliotheque *ptrB,const T_Titre title); 
 
-void rechercheLivreAuteur(const T_Bibliotheque *ptrB ,const T_Aut auteur); //fonction 4
+/*******************************************************************************************/
+/*Fonction n°4 */
+/*Description : */
+/*******************************************************************************************/
+void rechercheLivreAuteur(const T_Bibliotheque *ptrB ,const T_Aut auteur); 
 
-int supprimerLivre(T_Bibliotheque *ptrB,const T_Titre title);  //fonction 5
+/*******************************************************************************************/
+/*Fonction n°5 */
+/*Description : */
+/*******************************************************************************************/
+int supprimerLivre(T_Bibliotheque *ptrB,const T_Titre title); 
 
-int emprunterLivre(T_Bibliotheque *ptrB,const T_Titre title,const T_Aut name); //fonction 6
+/*******************************************************************************************/
+/*Fonction n°6 */
+/*Description : */
+/*******************************************************************************************/
+int emprunterLivre(T_Bibliotheque *ptrB,const T_Titre title,const T_Aut name); 
 
-int rendreLivre(T_Bibliotheque *ptrB,const T_Titre title,const T_Aut name); //fonction 7
+/*******************************************************************************************/
+/*Fonction n°7 */
+/*Description : */
+/*******************************************************************************************/
+int rendreLivre(T_Bibliotheque *ptrB,const T_Titre title,const T_Aut name); 
 
+/*******************************************************************************************/
+/*Fonction supplémentaire */
+/*Description : */
+/*******************************************************************************************/
 int estEmprunte(T_Bibliotheque *ptrB,const T_Titre title); //fonction en plus
 
-void trierLivresParTitre(T_Bibliotheque *ptrB); //fonction 8
+/*******************************************************************************************/
+/*Fonction n°8 */
+/*Description : */
+/*******************************************************************************************/
+void trierLivresParTitre(T_Bibliotheque *ptrB); 
 
-void trierLivresParAuteur(T_Bibliotheque *ptrB); //fonction 9
+/*******************************************************************************************/
+/*Fonction n°9 */
+/*Description : */
+/*******************************************************************************************/
+void trierLivresParAuteur(T_Bibliotheque *ptrB);
 
-void trierLivresParAnnee(T_Bibliotheque *ptrB); //fonction 10
+/*******************************************************************************************/
+/*Fonction n°10 */
+/*Description : */
+/*******************************************************************************************/
+void trierLivresParAnnee(T_Bibliotheque *ptrB); 
 
 #endif

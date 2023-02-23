@@ -1,6 +1,6 @@
 #include "es.h"
 
-
+//////////////////////////////////////////////////////////
 char *lire(char* lachaine,int nbMAXcaracAsaisir){
 	char car;
 	int i=0,nbesp=0;
@@ -35,6 +35,7 @@ char *lire(char* lachaine,int nbMAXcaracAsaisir){
 }
 
 
+//////////////////////////////////////////////////////////
 char * lireChaine(const char * nomChamps,char * chaine,int nbcarac){
 	printf("%s  ",nomChamps);
 	lire(chaine,nbcarac); // lire du TP4 (modifiée)
@@ -42,6 +43,7 @@ char * lireChaine(const char * nomChamps,char * chaine,int nbcarac){
 }
 
 
+//////////////////////////////////////////////////////////
 void afficherChaine(const char *nomChamp, const char *valeur){
 	printf("%s %s",nomChamp,valeur);
 }

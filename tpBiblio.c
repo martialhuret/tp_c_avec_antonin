@@ -1,9 +1,19 @@
 // TP GESTION D'UNE BIBLIOTHEQUE 
 #include "biblio.h"
 
-//prototype lecture de fichier
+//PROTOTYPES
 void lectureFichierTXT();
 
+void sauvegarde(T_Bibliotheque *ptrB);
+
+void chargement(T_Bibliotheque *ptrB);
+
+
+/////////////////////////////
+
+//FONCTIONS
+
+// fonction menu
 int menu(){
 	int choix;
 	// au programme du TP7 :
@@ -101,7 +111,10 @@ void lectureFichierTXT(){
 	else puts("ECHEC DE LECTURE DU FICHIER TXT !!!!!  ");
 }
 
+
 /////////////////////////////
+
+//PROGRAMME PRINCIPAL
 
 int main(){
 	//lectureFichierTXT();
