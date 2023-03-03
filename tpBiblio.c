@@ -145,8 +145,9 @@ int main(){
 					lireChaine("Quel est le titre du livre recherché ?",title, MAX_TITRE );
 							
 					//recherche du nom dans la bibliothèque puis utilisation de la fonction afficher livre : 
-					int position = rechercherLivre(&B,title);
-					if (position!=-1) printf("Le livre se situe à la place numéro %d dans l'étagère",position);
+					int position = rechercherLivre(&B,title)[0];
+					int occu = rechercherLivre(&B,title)[1];
+					if (position!=-1) printf("Le dernier livre correspondant à ce nom se situe à la place numéro %d dans l'étagère. Il y en a %d dans la bibliothèque",position,occu);
 					else printf("Le livre n'est pas dans le tableau");
 					break;
 

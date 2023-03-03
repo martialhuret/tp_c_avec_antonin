@@ -33,15 +33,23 @@ int  afficherBibliotheque(const T_Bibliotheque *ptrB){
 
 
 //////////////////////////////////////////////////////////
-int rechercherLivre(const T_Bibliotheque  *ptrB, const T_Titre title){
-	int i;
-	if(ptrB->nbLivres==0) return -1;
-	else {
-		for(i=0;i<ptrB->nbLivres;i++){
-			if (strcmp(title,((ptrB->etagere)[i].titre))==0) return i;
-			}
-	}
-	return -1;
+int * rechercherLivre(const T_Bibliotheque *ptrB, const T_Titre title) {
+    int i, derpos = -1, occu = 0;
+    int *retour = NULL;
+    if (ptrB->nbLivres == 0) {
+        return NULL;
+    } else {
+        for (i = 0; i < ptrB->nbLivres; i++) {
+            if (strncmp(title,(ptrB->etagere)[i].titre,MAX_TITRE) == 0) {
+                derpos = i;
+                occu++;
+            }
+        }
+        retour = malloc(2 * sizeof(int));
+        retour[0] = derpos;
+        retour[1] = occu;
+        return retour;
+    }
 }
 
 
@@ -70,7 +78,7 @@ void rechercheLivreAuteur(const T_Bibliotheque *ptrB ,const T_Aut auteur){
 
 //////////////////////////////////////////////////////////
 int supprimerLivre(T_Bibliotheque *ptrB, const T_Titre title){
-    int test = rechercherLivre(ptrB, title);
+    int test = rechercherLivre(ptrB, title)[0];
     if (test == -1) return 0;
     else {
         strcpy(ptrB->etagere[test].titre,ptrB->etagere[(ptrB->nbLivres)-1].titre);
@@ -82,13 +90,14 @@ int supprimerLivre(T_Bibliotheque *ptrB, const T_Titre title){
 
 //////////////////////////////////////////////////////////
 int estEmprunte(T_Bibliotheque *ptrB, const T_Titre title){
-	int pos = rechercherLivre(ptrB, title);
+	int pos = rechercherLivre(ptrB, title)[0];
 	if (strlen(((ptrB->etagere)[pos].emprunteur))!=0) return -1;
 	return pos;
 }
 
 
-//////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////// 
+/*
 int emprunterLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name){
 	int pos = estEmprunte(ptrB,title);
     if (pos !=-1){
@@ -96,21 +105,48 @@ int emprunterLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name){
 		return 1;}
 	else return 0;
 }
+*/
+
+int emprunterLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name) {
+    int *positions = rechercherLivre(ptrB, title);
+    if (positions == NULL) {
+        return -1; // le livre n'existe pas dans la bibliothèque
+    }
+    int i;
+    for (i = 0; i < positions[1]; i++) {
+        int pos = positions[0] - i;
+        if (strlen(((ptrB->etagere)[pos].emprunteur)) == 0) {
+            strcpy((ptrB->etagere)[pos].emprunteur, name);
+            free(positions);
+            return 1;
+        } else if (strcmp((ptrB->etagere)[pos].emprunteur, name) == 0) {
+            free(positions);
+            return 0; // l'emprunteur a déjà emprunté ce livre
+        }
+    }
+    free(positions);
+    return -1; // tous les exemplaires du livre sont déjà empruntés
+}
+
 
 
 //////////////////////////////////////////////////////////
-int rendreLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name){	
-	int pos = estEmprunte(ptrB,title);
-	int lapos = rechercherLivre(ptrB,title);
-	//verification que le livre est emprunté par la bonne personne 
-	if (pos==-1){ 
-		if (strcmp(((ptrB->etagere)[lapos].emprunteur),name)==0){ 
-			strcpy(((ptrB->etagere)[lapos].emprunteur),"");
-			return 1;
-		}
-		else return 2;
-	}
-	else return 0;
+int rendreLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name) {
+    int *positions = rechercherLivre(ptrB, title);
+    if (positions == NULL) {
+        return 0; // le livre n'existe pas dans la bibliothèque
+    }
+    int i;
+    for (i = 0; i < positions[1]; i++) {
+        int pos = positions[0] - i;
+        if (strcmp((ptrB->etagere)[pos].emprunteur, name) == 0) {
+            strcpy((ptrB->etagere)[pos].emprunteur, "");
+            free(positions);
+            return 1;
+        }
+    }
+    free(positions);
+    return 2; // le livre est emprunté par une autre personne ou tous les exemplaires sont déjà rendus
 }
 
 

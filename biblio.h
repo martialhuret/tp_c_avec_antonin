@@ -24,7 +24,7 @@ int  afficherBibliotheque(const T_Bibliotheque *ptrB);
 /*Fonction n°3 */
 /*Description : */
 /*******************************************************************************************/
-int rechercherLivre(const T_Bibliotheque *ptrB,const T_Titre title); 
+int * rechercherLivre(const T_Bibliotheque *ptrB,const T_Titre title); 
 
 /*******************************************************************************************/
 /*Fonction n°4 */
