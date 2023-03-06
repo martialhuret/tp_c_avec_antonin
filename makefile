@@ -11,3 +11,12 @@ livre.o : livre.c
 biblio.o : biblio.c
 	$(c) $(op) -c biblio.c	
 
+
+clean:
+	rm -f es.o
+	rm -f livre.o
+	rm -f biblio.o
+	rm -f exe
+	rm -f ladate
+	
+

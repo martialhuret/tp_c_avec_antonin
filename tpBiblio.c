@@ -35,8 +35,8 @@ int menu(){
 
 	// si les 5 choix (6-10) sont bien codés, changez le type T_Emp et remplacez-le par la structure T_Emp visible dans livre.h
 	// vous pourrez alors faire les menus 11,12,etc...
-	// printf("\n 11- lister les livres disponibles "); 
-	// printf("\n 12 - lister les emprunts en retard "); //on suppose qu'un emprunt dure 7 jours.
+	printf("\n 11- lister les livres disponibles "); 
+	printf("\n 12 - lister les emprunts en retard "); //on suppose qu'un emprunt dure 7 jours.
 	// printf("\n 13 - ... imaginez vous même vos propres fonctionnalités ")
 
 	printf("\n 0 - QUITTER");
@@ -85,10 +85,10 @@ void chargement(T_Bibliotheque *ptrB){
 
 //fonction de lecture du fichier txt 
 void lectureFichierTXT(){
-	int M=100;
+	//int M=100;
 	FILE *fic=NULL; //le type FILE
-	char chaine[M];
-	char chaine2[M];
+	//char chaine[M];
+	//char chaine2[M];
 	char c;
 	fic=fopen("fic.txt","rt"); // r = le mode read   w = mode write (avec ecrasement)
 	//fopen renvoie NULL si probleme (fichier effac� , disque non accessible ...
@@ -129,14 +129,16 @@ int main(){
 		chx= menu();
 		switch(chx){
 			case 1 : 	
-					reponse = ajouterLivre(   &B  );
-					if (reponse==1) printf(" ajout reussi !!");
-					else printf("impossible d ajouter (bibliotheque pleine)");
+					reponse = ajouterLivre(&B);
+					if (reponse==1) printf(" ajout reussi !!");  // cas ou l'ajout est réussi 
+					else printf("impossible d ajouter (bibliotheque pleine)");  // cas ou la bibliotheque est pleine 
+					printf("\n");
+					sauvegarde(&B);	//sauvergarde du fichier
 					break;
 							
 			case 2 : 	
 					reponse=afficherBibliotheque(&B);
-					if (reponse==0) printf("La bibliotheque est vide");
+					if (reponse==0) printf("La bibliotheque est vide");  // cas ou la biblio est vide
 					break;
 
 			case 3 : 
@@ -154,6 +156,7 @@ int main(){
 			case 4 :
 					// init var
 					T_Aut auteur;
+					
 					//Saisir d'un nom d'auteur pour la recherche des titres:
 					lireChaine("Veuillez saisir un auteur: ",auteur, K_MaxAut );
 
@@ -171,16 +174,24 @@ int main(){
 					int supp = supprimerLivre(&B,title);
 					if (supp!=0) printf("Le livre %s est supprimé",title);
 					else printf("La suppression est impossible");
+					printf("\n");
+					sauvegarde(&B);	//sauvergarde du fichier
 					break;
 
 			case 6 : 	
 					//emprunter un livre 
 					T_Aut nom;
-					lireChaine("Quel est le titre du livre que vous voulez emprunter ?",title, MAX_TITRE);
-					lireChaine("Quel est votre nom ?",nom, K_MaxAut);
+					printf("\nQuel est le titre du livre que vous voulez emprunter ?");
+					scanf("%[^\n]s",title);getchar();
+					printf("\nQuel est votre nom ?");
+					scanf("%[^\n]s",nom);getchar();		
 					int test = emprunterLivre(&B,title,nom);
-					if (test == 1) printf("\n Votre livre %s a bien été emprunté !", title);
+					if (test == 1){
+						printf("\n Votre livre %s a bien été emprunté !", title);
+						sauvegarde(&B);	//sauvergarde du fichier
+					}
 					else printf("\n Le livre n'a pas pu être emprunté car il n'est pas encore disponible !");
+					printf("\n");
 					break;
 			
 			case 7 :
@@ -188,9 +199,14 @@ int main(){
 					lireChaine("Quel est le titre du livre que vous souhaitez restituer?: ",title, MAX_TITRE);
 					lireChaine("Quel est votre nom ?",nom,K_MaxAut);
 					test = rendreLivre (&B,title,nom);
-					if (test == 1) printf("\n Votre livre %s a bien été rendu !", title);
+					if (test == 1){
+						printf("\n Votre livre %s a bien été rendu !", title);
+						sauvegarde(&B);	//sauvergarde du fichier
+					}
 					if (test == 2) printf("\n Ce n'est pas vous qui avez emprunté ce livre");
 					if (test == 0) printf("\n Le livre n'a pas pu être rendu car il n'est pas emprunté !");
+					printf("\n");
+					
 					break;
 
 			case 8 : 
@@ -198,6 +214,8 @@ int main(){
 					trierLivresParTitre(&B);
 					printf("Voici l'annuaire trié par titre : \n");
 					afficherBibliotheque(&B);	
+					printf("\n");
+					sauvegarde(&B);	//sauvergarde du fichier
 					break;
 	
 			case 9 : 
@@ -205,6 +223,8 @@ int main(){
 					trierLivresParAuteur(&B);
 					printf("Voici l'annuaire trié par auteur : \n");
 					afficherBibliotheque(&B);	
+					printf("\n");
+					sauvegarde(&B);	//sauvergarde du fichier
 					break;
 
 
@@ -213,12 +233,24 @@ int main(){
 					trierLivresParAnnee(&B);
 					printf("Voici l'annuaire trié par année : \n");
 					afficherBibliotheque(&B);	
+					printf("\n");
+					sauvegarde(&B);	//sauvergarde du fichier
 					break;
 
+			case 11 : 
+					//lister les livres dispos 
+					afficherLivreDispo(&B);
+					break;
+					
+			break;	
+
+			case 12 : 
+					afficherLivreRetard(&B);
+					//lister les empruns en retard  
 			break;	
 
 		}
-	} while(chx!=0);
+	} while(chx!=0);  //condition d'arrêt
 	
 	sauvegarde(&B);	//sauvergarde du fichier
 

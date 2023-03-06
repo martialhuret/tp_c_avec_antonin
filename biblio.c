@@ -87,26 +87,7 @@ int supprimerLivre(T_Bibliotheque *ptrB, const T_Titre title){
 	return 1;
 }
 
-
 //////////////////////////////////////////////////////////
-int estEmprunte(T_Bibliotheque *ptrB, const T_Titre title){
-	int pos = rechercherLivre(ptrB, title)[0];
-	if (strlen(((ptrB->etagere)[pos].emprunteur))!=0) return -1;
-	return pos;
-}
-
-
-///////////////////////////////////////////////////////// 
-/*
-int emprunterLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name){
-	int pos = estEmprunte(ptrB,title);
-    if (pos !=-1){
-		strcpy((ptrB->etagere)[pos].emprunteur,name);
-		return 1;}
-	else return 0;
-}
-*/
-
 int emprunterLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name) {
     int *positions = rechercherLivre(ptrB, title);
     if (positions == NULL) {
@@ -115,11 +96,12 @@ int emprunterLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name) 
     int i;
     for (i = 0; i < positions[1]; i++) {
         int pos = positions[0] - i;
-        if (strlen(((ptrB->etagere)[pos].emprunteur)) == 0) {
-            strcpy((ptrB->etagere)[pos].emprunteur, name);
+        if (strlen(((ptrB->etagere)[pos].emprunteur.nomemprunteur)) == 0) {
+            strcpy((ptrB->etagere)[pos].emprunteur.nomemprunteur, name);
             free(positions);
+			lireDateSysteme(&(ptrB->etagere)[pos].emprunteur);
             return 1;
-        } else if (strcmp((ptrB->etagere)[pos].emprunteur, name) == 0) {
+        } else if (strcmp((ptrB->etagere)[pos].emprunteur.nomemprunteur, name) == 0) {
             free(positions);
             return 0; // l'emprunteur a déjà emprunté ce livre
         }
@@ -139,8 +121,8 @@ int rendreLivre(T_Bibliotheque *ptrB, const T_Titre title, const T_Aut name) {
     int i;
     for (i = 0; i < positions[1]; i++) {
         int pos = positions[0] - i;
-        if (strcmp((ptrB->etagere)[pos].emprunteur, name) == 0) {
-            strcpy((ptrB->etagere)[pos].emprunteur, "");
+        if (strcmp((ptrB->etagere)[pos].emprunteur.nomemprunteur, name) == 0) {
+            strcpy((ptrB->etagere)[pos].emprunteur.nomemprunteur, "");
             free(positions);
             return 1;
         }
@@ -195,4 +177,102 @@ void trierLivresParAnnee(T_Bibliotheque *ptrB){
 		ptrB->etagere[minIndex] = ptrB->etagere[i];
 		ptrB->etagere[i] = temp;
 	}
+}
+
+//////////////////////////////////////////////////////////
+
+int afficherLivreDispo(const T_Bibliotheque *ptrB)
+{
+	//init var
+	int i;
+	int cpt = 0;
+
+	//si le nombre de livre est nul on renvoie 0, car rien a afficher
+	if(ptrB->nbLivres==0)
+		return 0;
+
+	//sinon on lance la boucle de recherche
+	else {
+		for(i=0;i<ptrB->nbLivres;i++)
+		{
+			//si le livre n'est pas emprunté, on l'affiche 
+			if(strlen(((ptrB->etagere)[i].emprunteur.nomemprunteur)) == 0)
+			{
+			    afficherLivre( &(ptrB->etagere[i]));
+				cpt++;
+			}	
+		}
+	//cas ou aucun livre n'a été affiché 
+	if (cpt == 0) printf("Aucun livre disponible!");
+	}
+}
+
+
+void  afficherLivreRetard(const T_Bibliotheque *ptrB){
+	//init var
+	int i;
+	char j[9],m[10],h[9],mer[11],vir[2];
+    int JourJ,a,cmp=0;
+
+    system("date > Ddate"	);
+    FILE * fic=NULL;  // pointeur de fichier
+    fic=fopen("Ddate","r"); //fileOpen en mode 'r'EAD
+
+    //ici , si fic vaut NULL, alors le fopen a indiquÃ©
+    //que le fichier Ddate n'est pas accessible
+    if (fic!=NULL){
+        while(!feof(fic)){
+            //fscanf(fic,"%s %d %s %d %s %s %s",j,&d,m,&a,vir,h,mer);
+            fscanf(fic,"%s %d %s %d %s",j,&JourJ,m,&a,h);	
+        }
+        fclose(fic);
+	int nbjour=30;
+	int B_JourJ=JourJ;
+	if ((strcmp(m,"janvier")==0) || (strcmp(m,"mars")==0) || (strcmp(m,"mai")==0) || (strcmp(m,"juillet")==0) || (strcmp(m,"aout")==0) || (strcmp(m,"octobre")==0) || (strcmp(m,"decembre")==0)) nbjour=31;
+
+	if (strcmp(m,"fevrier")==0){
+		if (((a-2020)%4)==0) nbjour = 29;
+		else nbjour = 28;
+	}
+
+	if ((strcmp(m,"avril")==0) || (strcmp(m,"juin")==0) || (strcmp(m,"septembre")==0) || (strcmp(m,"novembre")==0) ) nbjour=30;
+	
+	T_Emp E;
+
+	if (strcmp(m,"janvier")==0) E.lemois=janvier;
+	if (strcmp(m,"fevrier")==0) E.lemois=fevrier;
+	if (strcmp(m,"mars")==0) E.lemois=mars;
+	if (strcmp(m,"avril")==0) E.lemois=avril;
+	if (strcmp(m,"mai")==0) E.lemois=mai;
+	if (strcmp(m,"juin")==0) E.lemois=juin;
+	if (strcmp(m,"juillet")==0) E.lemois=juillet;
+	if (strcmp(m,"aout")==0) E.lemois=aout;
+	if (strcmp(m,"septembre")==0) E.lemois=septembre;
+	if (strcmp(m,"octobre")==0) E.lemois=octobre;
+	if (strcmp(m,"novembre")==0) E.lemois=novembre;
+	if (strcmp(m,"decembre")==0) E.lemois=decembre;
+	
+	for(i=0;i<ptrB->nbLivres;i++){
+			JourJ=B_JourJ;
+			int JourE = ((ptrB->etagere)[i].emprunteur.ladate);
+			while(JourE != 0){
+				if (JourE==nbjour) break;
+				else {
+					JourE++;
+					JourJ++;
+				}
+			}
+
+			JourJ -= nbjour;
+			if(JourJ>7) {
+				afficherLivre( &(ptrB->etagere[i])); 
+				cmp++;}
+			else if(E.lemois!=(ptrB->etagere)[i].emprunteur.lemois) {afficherLivre( &(ptrB->etagere[i])); cmp++;}
+				
+			}
+			
+	}
+
+	if (cmp==0) printf("\nIl n'y a pas de livre en retard");
+	
 }
